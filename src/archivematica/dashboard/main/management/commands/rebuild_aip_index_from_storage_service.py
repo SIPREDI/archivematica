@@ -39,7 +39,7 @@ import shutil
 import sys
 import tempfile
 
-from elasticsearch import ElasticsearchException
+from elasticsearch.exceptions import ApiError
 from lxml import etree
 
 import archivematica.search.deleting
@@ -259,7 +259,7 @@ class Command(DashboardCommand):
             self.info(f"Successfully indexed package {uuid}")
             os.remove(mets_download_path)
             return True
-        except (ElasticsearchException, etree.XMLSyntaxError) as err:
+        except (ApiError, etree.XMLSyntaxError) as err:
             self.error(f"Error indexing package {uuid}. Details: {err}")
             os.remove(mets_download_path)
             return False

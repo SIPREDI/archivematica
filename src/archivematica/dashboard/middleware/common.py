@@ -18,12 +18,13 @@ import logging
 import sys
 import traceback
 
-import elasticsearch
 from django.conf import settings
 from django.http import HttpResponseServerError
 from django.shortcuts import render
 from django.template import TemplateDoesNotExist
 from django.utils.deprecation import MiddlewareMixin
+from elasticsearch.exceptions import ApiError
+from elasticsearch.exceptions import TransportError
 from shibboleth.middleware import ShibbolethRemoteUserMiddleware
 
 logger = logging.getLogger("archivematica.dashboard")
@@ -70,8 +71,8 @@ class ElasticsearchMiddleware(MiddlewareMixin):
     """
 
     EXCEPTIONS = (
-        elasticsearch.ElasticsearchException,
-        elasticsearch.ImproperlyConfigured,
+        ApiError,
+        TransportError,
     )
 
     def process_exception(self, request, exception):

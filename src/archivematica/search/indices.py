@@ -1,8 +1,11 @@
 import logging
 import sys
 
+from elasticsearch.exceptions import RequestError
+
 from archivematica.search.constants import DEPTH_LIMIT
-from archivematica.search.constants import DOC_TYPE
+
+# DOC_TYPE import removed - not needed in Elasticsearch 8.x
 from archivematica.search.constants import ES_FIELD_ACCESSION_IDS
 from archivematica.search.constants import ES_FIELD_AICID
 from archivematica.search.constants import ES_FIELD_CREATED
@@ -33,7 +36,11 @@ def create_indexes_if_needed(client, indexes):
         # Call get index body functions below for each index
         body = getattr(sys.modules[__name__], "_get_%s_index_body" % index)()
         logger.info('Creating "%s" index ...', index)
-        client.indices.create(index, body=body, ignore=400)
+        try:
+            client.indices.create(index=index, body=body)
+        except RequestError as e:
+            if not e.error == "resource_already_exists_exception":
+                raise
         logger.info("Index created.")
 
 
@@ -76,22 +83,20 @@ def _get_aips_index_body():
     return {
         "settings": _get_index_settings(),
         "mappings": {
-            DOC_TYPE: {
-                "date_detection": False,
-                "properties": {
-                    ES_FIELD_NAME: {
-                        "type": "text",
-                        "fields": {"raw": {"type": "keyword"}},
-                        "analyzer": "file_path_and_name",
-                    },
-                    ES_FIELD_SIZE: {"type": "double"},
-                    ES_FIELD_UUID: {"type": "keyword"},
-                    ES_FIELD_ACCESSION_IDS: {"type": "keyword"},
-                    ES_FIELD_STATUS: {"type": "keyword"},
-                    ES_FIELD_FILECOUNT: {"type": "integer"},
-                    ES_FIELD_LOCATION: {"type": "keyword"},
+            "date_detection": False,
+            "properties": {
+                ES_FIELD_NAME: {
+                    "type": "text",
+                    "fields": {"raw": {"type": "keyword"}},
+                    "analyzer": "file_path_and_name",
                 },
-            }
+                ES_FIELD_SIZE: {"type": "double"},
+                ES_FIELD_UUID: {"type": "keyword"},
+                ES_FIELD_ACCESSION_IDS: {"type": "keyword"},
+                ES_FIELD_STATUS: {"type": "keyword"},
+                ES_FIELD_FILECOUNT: {"type": "integer"},
+                ES_FIELD_LOCATION: {"type": "keyword"},
+            },
         },
     }
 
@@ -106,31 +111,29 @@ def _get_aipfiles_index_body():
     return {
         "settings": _get_index_settings(),
         "mappings": {
-            DOC_TYPE: {
-                "date_detection": False,
-                "properties": {
-                    "sipName": {
-                        "type": "text",
-                        "fields": {"raw": {"type": "keyword"}},
-                        "analyzer": "file_path_and_name",
-                    },
-                    "AIPUUID": {"type": "keyword"},
-                    "FILEUUID": {"type": "keyword"},
-                    "isPartOf": {"type": "keyword"},
-                    ES_FIELD_AICID: {"type": "keyword"},
-                    "indexedAt": {"type": "double"},
-                    "filePath": {
-                        "type": "text",
-                        "fields": {"raw": {"type": "keyword"}},
-                        "analyzer": "file_path_and_name",
-                    },
-                    "fileExtension": {"type": "text"},
-                    "origin": {"type": "text"},
-                    "identifiers": {"type": "keyword"},
-                    "accessionid": {"type": "keyword"},
-                    ES_FIELD_STATUS: {"type": "keyword"},
+            "date_detection": False,
+            "properties": {
+                "sipName": {
+                    "type": "text",
+                    "fields": {"raw": {"type": "keyword"}},
+                    "analyzer": "file_path_and_name",
                 },
-            }
+                "AIPUUID": {"type": "keyword"},
+                "FILEUUID": {"type": "keyword"},
+                "isPartOf": {"type": "keyword"},
+                ES_FIELD_AICID: {"type": "keyword"},
+                "indexedAt": {"type": "double"},
+                "filePath": {
+                    "type": "text",
+                    "fields": {"raw": {"type": "keyword"}},
+                    "analyzer": "file_path_and_name",
+                },
+                "fileExtension": {"type": "text"},
+                "origin": {"type": "text"},
+                "identifiers": {"type": "keyword"},
+                "accessionid": {"type": "keyword"},
+                ES_FIELD_STATUS: {"type": "keyword"},
+            },
         },
     }
 
@@ -139,21 +142,19 @@ def _get_transfers_index_body():
     return {
         "settings": _get_index_settings(),
         "mappings": {
-            DOC_TYPE: {
-                "properties": {
-                    ES_FIELD_NAME: {
-                        "type": "text",
-                        "fields": {"raw": {"type": "keyword"}},
-                        "analyzer": "file_path_and_name",
-                    },
-                    ES_FIELD_STATUS: {"type": "text"},
-                    "ingest_date": {"type": "date", "format": "dateOptionalTime"},
-                    ES_FIELD_SIZE: {"type": "long"},
-                    ES_FIELD_FILECOUNT: {"type": "integer"},
-                    ES_FIELD_UUID: {"type": "keyword"},
-                    "accessionid": {"type": "keyword"},
-                    "pending_deletion": {"type": "boolean"},
-                }
+            "properties": {
+                ES_FIELD_NAME: {
+                    "type": "text",
+                    "fields": {"raw": {"type": "keyword"}},
+                    "analyzer": "file_path_and_name",
+                },
+                ES_FIELD_STATUS: {"type": "text"},
+                "ingest_date": {"type": "date", "format": "date_optional_time"},
+                ES_FIELD_SIZE: {"type": "long"},
+                ES_FIELD_FILECOUNT: {"type": "integer"},
+                ES_FIELD_UUID: {"type": "keyword"},
+                "accessionid": {"type": "keyword"},
+                "pending_deletion": {"type": "boolean"},
             }
         },
     }
@@ -163,46 +164,44 @@ def _get_transferfiles_index_body():
     return {
         "settings": _get_index_settings(),
         "mappings": {
-            DOC_TYPE: {
-                "properties": {
-                    "filename": {
-                        "type": "text",
-                        "fields": {"raw": {"type": "keyword"}},
-                        "analyzer": "file_path_and_name",
+            "properties": {
+                "filename": {
+                    "type": "text",
+                    "fields": {"raw": {"type": "keyword"}},
+                    "analyzer": "file_path_and_name",
+                },
+                "relative_path": {"type": "text", "analyzer": "file_path_and_name"},
+                "fileuuid": {"type": "keyword"},
+                "sipuuid": {"type": "keyword"},
+                "accessionid": {"type": "keyword"},
+                ES_FIELD_STATUS: {"type": "keyword"},
+                "origin": {"type": "keyword"},
+                "ingestdate": {"type": "date", "format": "date_optional_time"},
+                # METS.xml files in transfers sent to backlog will have ''
+                # as their modification_date value. This can cause a
+                # failure in certain cases, see:
+                # https://github.com/artefactual/archivematica/issues/719.
+                # For this reason, we specify the type and format here and
+                # ignore malformed values like ''.
+                "modification_date": {
+                    "type": "date",
+                    "format": "date_optional_time",
+                    "ignore_malformed": True,
+                },
+                ES_FIELD_CREATED: {"type": "double"},
+                ES_FIELD_SIZE: {"type": "double"},
+                "tags": {"type": "keyword"},
+                "file_extension": {"type": "keyword"},
+                "bulk_extractor_reports": {"type": "keyword"},
+                "format": {
+                    "type": "nested",
+                    "properties": {
+                        "puid": {"type": "keyword"},
+                        "format": {"type": "text"},
+                        "group": {"type": "text"},
                     },
-                    "relative_path": {"type": "text", "analyzer": "file_path_and_name"},
-                    "fileuuid": {"type": "keyword"},
-                    "sipuuid": {"type": "keyword"},
-                    "accessionid": {"type": "keyword"},
-                    ES_FIELD_STATUS: {"type": "keyword"},
-                    "origin": {"type": "keyword"},
-                    "ingestdate": {"type": "date", "format": "dateOptionalTime"},
-                    # METS.xml files in transfers sent to backlog will have ''
-                    # as their modification_date value. This can cause a
-                    # failure in certain cases, see:
-                    # https://github.com/artefactual/archivematica/issues/719.
-                    # For this reason, we specify the type and format here and
-                    # ignore malformed values like ''.
-                    "modification_date": {
-                        "type": "date",
-                        "format": "dateOptionalTime",
-                        "ignore_malformed": True,
-                    },
-                    ES_FIELD_CREATED: {"type": "double"},
-                    ES_FIELD_SIZE: {"type": "double"},
-                    "tags": {"type": "keyword"},
-                    "file_extension": {"type": "keyword"},
-                    "bulk_extractor_reports": {"type": "keyword"},
-                    "format": {
-                        "type": "nested",
-                        "properties": {
-                            "puid": {"type": "keyword"},
-                            "format": {"type": "text"},
-                            "group": {"type": "text"},
-                        },
-                    },
-                    "pending_deletion": {"type": "boolean"},
-                }
+                },
+                "pending_deletion": {"type": "boolean"},
             }
         },
     }

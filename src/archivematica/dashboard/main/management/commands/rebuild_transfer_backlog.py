@@ -52,6 +52,7 @@ import metsrw
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
 from django.core.management.base import CommandError
+from elasticsearch.exceptions import NotFoundError
 
 import archivematica.search.client
 import archivematica.search.constants
@@ -236,7 +237,10 @@ class Command(DashboardCommand):
             'in the "transfers" and "transferfiles" indexes...'
         )
         time.sleep(3)  # Time for the user to panic and kill the process.
-        es_client.indices.delete(",".join(indexes), ignore=404)
+        try:
+            es_client.indices.delete(index=",".join(indexes))
+        except NotFoundError:
+            pass
 
     def create_indexes(self, es_client, indexes):
         """Create search indexes."""

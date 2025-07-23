@@ -15,8 +15,9 @@ Execution example:
 import json
 import sys
 
-import elasticsearch
 from django.conf import settings
+from elasticsearch.exceptions import ApiError
+from elasticsearch.exceptions import NotFoundError
 
 import archivematica.search.client
 import archivematica.search.constants
@@ -87,9 +88,11 @@ class Command(DashboardCommand):
         self.info("Creating new indexes.")
         try:
             es_client.indices.delete(
-                ",".join(archivematica.search.constants.INDEXES), ignore=404
+                index=",".join(archivematica.search.constants.INDEXES)
             )
             archivematica.search.indices.create_indexes_if_needed(es_client, indexes)
+        except NotFoundError:
+            pass
         except Exception as e:
             self.error(
                 f"The Elasticsearch indexes could not be recreated in {settings.ELASTICSEARCH_SERVER}. "
@@ -106,10 +109,9 @@ class Command(DashboardCommand):
                     "connect_timeout": "{}s".format(options["timeout"]),
                 },
                 "index": "",
-                "type": "",
                 "size": options["size"],
             },
-            "dest": {"index": "", "type": archivematica.search.constants.DOC_TYPE},
+            "dest": {"index": ""},
         }
 
         # Add basic auth
@@ -118,23 +120,20 @@ class Command(DashboardCommand):
             if options["password"] != "":
                 body["source"]["remote"]["password"] = options["password"]
 
-        # Indexes and types to reindex
+        # Indexes to reindex
         indexes_relations = [
-            {"dest_index": "aips", "source_index": "aips", "source_type": "aip"},
+            {"dest_index": "aips", "source_index": "aips"},
             {
                 "dest_index": "aipfiles",
                 "source_index": "aips",
-                "source_type": "aipfile",
             },
             {
                 "dest_index": "transfers",
                 "source_index": "transfers",
-                "source_type": "transfer",
             },
             {
                 "dest_index": "transferfiles",
                 "source_index": "transfers",
-                "source_type": "transferfile",
             },
         ]
 
@@ -147,12 +146,11 @@ class Command(DashboardCommand):
             # Update request body
             body["dest"]["index"] = indexes_relation["dest_index"]
             body["source"]["index"] = indexes_relation["source_index"]
-            body["source"]["type"] = indexes_relation["source_type"]
             # Reindex request
             self.info("Reindexing %s:" % indexes_relation["dest_index"])
             try:
                 response = es_client.reindex(body=body)
-            except elasticsearch.TransportError as exc:
+            except ApiError as exc:
                 fails += 1
                 self.error(f"Error: {exc}. Details:\n{exc.info}")
             except Exception as exc:

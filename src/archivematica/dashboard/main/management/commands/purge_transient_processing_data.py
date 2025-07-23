@@ -38,7 +38,7 @@ from django.conf import settings as django_settings
 from django.core.management.base import CommandError
 from django.utils import timezone
 from django.utils.dateparse import parse_duration
-from elasticsearch import ElasticsearchException
+from elasticsearch.exceptions import ApiError
 
 import archivematica.search.client
 import archivematica.search.constants
@@ -97,7 +97,7 @@ class Command(DashboardCommand):
             try:
                 archivematica.search.client.setup_reading_from_conf(django_settings)
                 es_client = archivematica.search.client.get_client()
-            except ElasticsearchException as err:
+            except ApiError as err:
                 raise CommandError(f"Unable to connect to Elasticsearch: {err}")
 
         # Build look-up options.

@@ -21,7 +21,9 @@ bagit==1.9.0
 brotli==1.1.0
     # via -r requirements.in
 certifi==2025.6.15
-    # via requests
+    # via
+    #   elastic-transport
+    #   requests
 cffi==1.17.1
     # via cryptography
 charset-normalizer==3.4.2
@@ -55,7 +57,9 @@ django-shibboleth-remoteuser @ git+https://github.com/artefactual-labs/django-sh
     # via -r requirements.in
 django-tastypie==0.15.1
     # via -r requirements.in
-elasticsearch==6.8.2
+elastic-transport==8.17.1
+    # via elasticsearch
+elasticsearch==8.18.1
     # via -r requirements.in
 gearman3 @ git+https://github.com/artefactual-labs/python-gearman.git@b68efc868c7a494dd6a2d2e820fb098a6da9f797
     # via -r requirements.in
@@ -119,6 +123,7 @@ python-dateutil==2.9.0.post0
     # via
     #   -r requirements.in
     #   django-tastypie
+    #   elasticsearch
 python-ldap==3.4.4
     # via
     #   -r requirements.in
@@ -151,13 +156,14 @@ sqlparse==0.5.3
 typing-extensions==4.14.0
     # via
     #   asgiref
+    #   elasticsearch
     #   referencing
 unidecode==1.4.0
     # via -r requirements.in
 urllib3==2.5.0
     # via
     #   amclient
-    #   elasticsearch
+    #   elastic-transport
     #   requests
 whitenoise==6.9.0
     # via -r requirements.in

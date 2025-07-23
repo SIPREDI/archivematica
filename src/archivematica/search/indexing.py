@@ -10,7 +10,8 @@ from archivematica.archivematicaCommon.aip_mets_parser import AIPMETSParser
 from archivematica.dashboard.main.models import File
 from archivematica.search.constants import AIP_FILES_INDEX
 from archivematica.search.constants import AIPS_INDEX
-from archivematica.search.constants import DOC_TYPE
+
+# DOC_TYPE import removed - not needed in Elasticsearch 8.x
 from archivematica.search.constants import ES_FIELD_ACCESSION_IDS
 from archivematica.search.constants import ES_FIELD_AICCOUNT
 from archivematica.search.constants import ES_FIELD_AICID
@@ -82,7 +83,6 @@ def _index_aip_files(
             yield {
                 "_op_type": "index",
                 "_index": AIP_FILES_INDEX,
-                "_type": DOC_TYPE,
                 "_source": file_data,
             }
 
@@ -433,7 +433,5 @@ def set_file_tags(client, uuid, tags):
         )
 
     body = {"doc": {"tags": tags}}
-    client.update(
-        body=body, index=TRANSFER_FILES_INDEX, doc_type=DOC_TYPE, id=document_ids[0]
-    )
+    client.update(body=body, index=TRANSFER_FILES_INDEX, id=document_ids[0])
     return True

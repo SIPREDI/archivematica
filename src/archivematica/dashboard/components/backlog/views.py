@@ -211,15 +211,23 @@ def search(request):
                 "name,uuid,file_count,ingest_date,accessionid,size,pending_deletion"
             )
 
-        hits = es_client.search(
-            index=index,
-            body=query,
-            from_=start,
-            size=page_size,
-            sort=order_by + ":" + sort_direction if order_by else "",
-            _source=source,
-        )
+        search_params = {
+            "index": index,
+            "body": query,
+            "from_": start,
+            "size": page_size,
+            "_source": source,
+        }
+        if order_by:
+            search_params["sort"] = [
+                {order_by: {"order": sort_direction, "unmapped_type": "keyword"}}
+            ]
+
+        hits = es_client.search(**search_params)
+        # Handle both ES 6.x and 8.x response formats
         hit_count = hits["hits"]["total"]
+        if isinstance(hit_count, dict):
+            hit_count = hit_count["value"]
 
     except Exception:
         err_desc = "Error accessing transfers index"

@@ -13,7 +13,7 @@ Execution example:
 import sys
 
 from django.conf import settings
-from elasticsearch import ElasticsearchException
+from elasticsearch.exceptions import ApiError
 
 import archivematica.search.client
 import archivematica.search.constants
@@ -37,14 +37,13 @@ class Command(DashboardCommand):
         try:
             archivematica.search.client.setup_reading_from_conf(settings)
             es_client = archivematica.search.client.get_client()
-        except ElasticsearchException:
+        except ApiError:
             self.error("Error: Elasticsearch may not be running.")
             sys.exit(1)
 
         # Update the AIPs index mappings.
         es_client.indices.put_mapping(
             index=archivematica.search.constants.AIPS_INDEX,
-            doc_type=archivematica.search.constants.DOC_TYPE,
             body={
                 "properties": {
                     archivematica.search.constants.ES_FIELD_ACCESSION_IDS: {
@@ -64,7 +63,6 @@ class Command(DashboardCommand):
         # Update the AIP files index mapping.
         es_client.indices.put_mapping(
             index=archivematica.search.constants.AIP_FILES_INDEX,
-            doc_type=archivematica.search.constants.DOC_TYPE,
             body={
                 "properties": {
                     "accessionid": {"type": "keyword"},

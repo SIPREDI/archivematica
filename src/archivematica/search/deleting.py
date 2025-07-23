@@ -5,7 +5,8 @@ from django.db.models import Q
 from archivematica.dashboard.main.models import File
 from archivematica.search.constants import AIP_FILES_INDEX
 from archivematica.search.constants import AIPS_INDEX
-from archivematica.search.constants import DOC_TYPE
+
+# DOC_TYPE import removed - not needed in Elasticsearch 8.x
 from archivematica.search.constants import ES_FIELD_UUID
 from archivematica.search.constants import TRANSFER_FILES_INDEX
 from archivematica.search.constants import TRANSFERS_INDEX
@@ -42,9 +43,7 @@ def _remove_transfer_files(client, uuid, unit_type=None):
             )
             if len(files) > 0:
                 for file_id in files:
-                    client.delete(
-                        index=TRANSFER_FILES_INDEX, doc_type=DOC_TYPE, id=file_id
-                    )
+                    client.delete(index=TRANSFER_FILES_INDEX, id=file_id)
     else:
         if not unit_type:
             unit_type = "transfer or SIP"

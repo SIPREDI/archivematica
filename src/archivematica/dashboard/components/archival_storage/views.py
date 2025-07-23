@@ -33,7 +33,7 @@ from django.template.defaultfilters import filesizeformat
 from django.utils.timezone import get_current_timezone
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _
-from elasticsearch import ElasticsearchException
+from elasticsearch.exceptions import ApiError
 
 import archivematica.search.client
 import archivematica.search.constants
@@ -369,14 +369,18 @@ def search(request):
             index = archivematica.search.constants.AIPS_INDEX
             source = "name,uuid,size,accessionids,created,status,encrypted,AICID,isPartOf,countAIPsinAIC,location"
 
-        results = es_client.search(
-            index=index,
-            body=query,
-            from_=start,
-            size=page_size,
-            sort=order_by + ":" + sort_direction if order_by else "",
-            _source=source,
-        )
+        search_params = {
+            "index": index,
+            "body": query,
+            "from_": start,
+            "size": page_size,
+            "_source": source,
+        }
+        if order_by:
+            search_params["sort"] = [
+                {order_by: {"order": sort_direction, "unmapped_type": "keyword"}}
+            ]
+        results = es_client.search(**search_params)
 
         if file_mode:
             augmented_results = search_augment_file_results(es_client, results)
@@ -386,7 +390,10 @@ def search(request):
         if request_file and not file_mode:
             return search_as_csv(augmented_results, file_name=file_name)
 
+        # Handle both ES 6.x and 8.x response formats
         hit_count = results["hits"]["total"]
+        if isinstance(hit_count, dict):
+            hit_count = hit_count["value"]
 
         return helpers.json_response(
             {
@@ -399,7 +406,7 @@ def search(request):
             }
         )
 
-    except ElasticsearchException:
+    except ApiError:
         err_desc = "Error accessing AIPs index"
         logger.exception(err_desc)
         return HttpResponse(err_desc)
@@ -491,7 +498,7 @@ def search_augment_file_results(es_client, raw_results):
                 AIPSTOREPATH + "/", "AIPsStore/"
             )
 
-        except ElasticsearchException:
+        except ApiError:
             aip = None
             clone["sipname"] = False
 
@@ -541,7 +548,7 @@ def create_aic(request):
         buckets = results["aggregations"]["aip_uuids"]["buckets"]
         aip_uuids = [bucket["key"] for bucket in buckets]
 
-    except ElasticsearchException:
+    except ApiError:
         err_desc = "Error accessing AIPs index"
         logger.exception(err_desc)
         return HttpResponse(err_desc)
@@ -729,9 +736,7 @@ def total_size_of_aips(es_client):
 def _document_json_response(document_id_modified, index):
     document_id = document_id_modified.replace("____", "-")
     es_client = archivematica.search.client.get_client()
-    data = es_client.get(
-        index=index, doc_type=archivematica.search.constants.DOC_TYPE, id=document_id
-    )
+    data = es_client.get(index=index, id=document_id)
     pretty_json = json.dumps(data, sort_keys=True, indent=2)
     return HttpResponse(pretty_json, content_type="application/json")
 

@@ -2,7 +2,8 @@ import logging
 
 from archivematica.search.constants import AIP_FILES_INDEX
 from archivematica.search.constants import AIPS_INDEX
-from archivematica.search.constants import DOC_TYPE
+
+# DOC_TYPE import removed - not needed in Elasticsearch 8.x
 from archivematica.search.constants import ES_FIELD_STATUS
 from archivematica.search.constants import ES_FIELD_UUID
 from archivematica.search.constants import STATUS_UPLOADED
@@ -28,9 +29,7 @@ def _update_field(client, index, uuid, field, value):
         logger.error(f"Unable to find document with UUID {uuid} in index {index}")
         return
 
-    client.update(
-        body={"doc": {field: value}}, index=index, doc_type=DOC_TYPE, id=document_id
-    )
+    client.update(body={"doc": {field: value}}, index=index, id=document_id)
 
 
 def mark_aip_stored(client, uuid):
@@ -60,7 +59,6 @@ def _update_field_for_package_and_files(
         client.update(
             body={"doc": {field: value}},
             index=files_index,
-            doc_type=DOC_TYPE,
             id=file_id,
         )
 

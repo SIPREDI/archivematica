@@ -1,7 +1,6 @@
 import logging
 
 from elasticsearch import Elasticsearch
-from elasticsearch import ImproperlyConfigured
 
 from archivematica.search.constants import AIP_FILES_INDEX
 from archivematica.search.constants import AIPS_INDEX
@@ -29,9 +28,7 @@ def setup(hosts, timeout=DEFAULT_TIMEOUT, enabled=(AIPS_INDEX, TRANSFERS_INDEX))
     global _es_client
 
     _es_hosts = hosts
-    _es_client = Elasticsearch(
-        **{"hosts": _es_hosts, "timeout": timeout, "dead_timeout": 2}
-    )
+    _es_client = Elasticsearch(hosts=[f"http://{_es_hosts}"], request_timeout=timeout)
 
     # TODO: Do we really need to be able to create the indexes
     # on the fly? Could we force to run the rebuild commands and
@@ -63,7 +60,7 @@ def get_client():
     when they cannot be found.
     """
     if not _es_client:
-        raise ImproperlyConfigured(
+        raise ValueError(
             "The Elasticsearch client has not been set up yet. Please call setup() first."
         )
     return _es_client

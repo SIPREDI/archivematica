@@ -1,6 +1,6 @@
 import time
 
-from archivematica.search.constants import DOC_TYPE
+# DOC_TYPE import removed - not needed in Elasticsearch 8.x
 
 
 def _wait_for_cluster_yellow_status(client, wait_between_tries=10, max_tries=10):
@@ -36,7 +36,7 @@ def _try_to_index(
         raise ValueError("max_tries must be 1 or greater")
     for _ in range(0, max_tries):
         try:
-            client.index(body=data, index=index, doc_type=DOC_TYPE)
+            client.index(body=data, index=index)
             return
         except Exception as e:
             exception = e

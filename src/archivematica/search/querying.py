@@ -24,10 +24,15 @@ def search_all_results(client, body, index):
 
     results = client.search(body=body, index=index, size=MAX_QUERY_SIZE)
 
-    if results["hits"]["total"] > MAX_QUERY_SIZE:
+    # Handle both ES 6.x and 8.x response formats
+    total = results["hits"]["total"]
+    if isinstance(total, dict):
+        total = total["value"]
+
+    if total > MAX_QUERY_SIZE:
         logger.warning(
             "Number of items in backlog (%s) exceeds maximum amount fetched (%s)",
-            results["hits"]["total"],
+            total,
             MAX_QUERY_SIZE,
         )
     return results
@@ -74,7 +79,13 @@ def get_file_tags(client, uuid):
 
     results = client.search(body=query, index=TRANSFER_FILES_INDEX, _source="tags")
 
-    count = results["hits"]["total"]
+    # Handle both ES 6.x and 8.x response formats
+    total = results["hits"]["total"]
+    if isinstance(total, dict):
+        count = total["value"]
+    else:
+        count = total
+
     if count == 0:
         raise EmptySearchResultError(f"No matches found for file with UUID {uuid}")
     if count > 1:

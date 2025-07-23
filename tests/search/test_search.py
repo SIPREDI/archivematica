@@ -44,7 +44,6 @@ def es_client():
                 "hits": [
                     {
                         "_index": "aips",
-                        "_type": "_doc",
                         "_id": "lBsZBWgBn49OAVhMXeO8",
                         "_score": 0.2876821,
                         "_source": {"uuid": "b34521a3-1c63-43dd-b901-584416f36c91"},
@@ -113,14 +112,12 @@ def test_delete_aip(perform_request, es_client):
                 "hits": [
                     {
                         "_index": "aipfiles",
-                        "_type": "_doc",
                         "_id": "lRsZBWgBn49OAVhMXuMC",
                         "_score": 0.2876821,
                         "_source": {"origin": "1a14043f-68ef-4bfe-a129-e2e4cdbe391b"},
                     },
                     {
                         "_index": "aipfiles",
-                        "_type": "_doc",
                         "_id": "lhsZBWgBn49OAVhMXuMh",
                         "_score": 0.2876821,
                         "_source": {"origin": "1a14043f-68ef-4bfe-a129-e2e4cdbe391b"},
@@ -208,7 +205,6 @@ def test_delete_aip_files(perform_request, es_client):
                 "hits": [
                     {
                         "_index": "transferfiles",
-                        "_type": "_doc",
                         "_id": "mBsZBWgBn49OAVhMh-OV",
                         "_score": 0.6931472,
                         "_source": {
@@ -234,7 +230,6 @@ def test_delete_aip_files(perform_request, es_client):
         },
         {
             "_index": "transferfiles",
-            "_type": "_doc",
             "_id": "mBsZBWgBn49OAVhMh-OV",
             "_version": 2,
             "result": "updated",
@@ -253,7 +248,6 @@ def test_delete_aip_files(perform_request, es_client):
                 "hits": [
                     {
                         "_index": "transferfiles",
-                        "_type": "_doc",
                         "_id": "mBsZBWgBn49OAVhMh-OV",
                         "_score": 0.47000363,
                         "_source": {"tags": ["test"]},
@@ -840,7 +834,6 @@ def test_index_aip_and_files(
             ],
             "uuid": str(aip_uuid),
         },
-        doc_type="_doc",
         index="aips",
     )
     assert printfn.mock_calls == [
@@ -960,7 +953,6 @@ def test_index_transfer_and_files(
                 "pending_deletion": False,
             },
             index="transferfiles",
-            doc_type="_doc",
         ),
         mock.call(
             body={
@@ -973,7 +965,6 @@ def test_index_transfer_and_files(
                 "status": expected_status,
                 "uuid": str(transfer.uuid),
             },
-            doc_type="_doc",
             index="transfers",
         ),
     ]
@@ -1095,7 +1086,6 @@ def test_remove_backlog_transfer_files(search_all_results, client, transfer):
     )
     client.delete.assert_called_once_with(
         index=archivematica.search.constants.TRANSFER_FILES_INDEX,
-        doc_type=archivematica.search.constants.DOC_TYPE,
         id=file_doc_id,
     )
 
@@ -1125,7 +1115,6 @@ def test_remove_sip_transfer_files(search_all_results, client, transfer, transfe
     )
     client.delete.assert_called_once_with(
         index=archivematica.search.constants.TRANSFER_FILES_INDEX,
-        doc_type=archivematica.search.constants.DOC_TYPE,
         id=file_doc_id,
     )
 
@@ -1166,7 +1155,6 @@ def test_mark_aip_stored(_document_ids_from_field_query, client):
             }
         },
         index=archivematica.search.constants.AIPS_INDEX,
-        doc_type=archivematica.search.constants.DOC_TYPE,
         id=aip_doc_id,
     )
     _document_ids_from_field_query.assert_called_once_with(
@@ -1243,13 +1231,11 @@ def test_update_helpers(
         mock.call(
             body={"doc": {field: value}},
             index=package_index,
-            doc_type=archivematica.search.constants.DOC_TYPE,
             id=package_doc_id,
         ),
         mock.call(
             body={"doc": {field: value}},
             index=files_index,
-            doc_type=archivematica.search.constants.DOC_TYPE,
             id=file_doc_id,
         ),
     ]
@@ -1303,12 +1289,8 @@ def test_try_to_index_retries_after_error(client):
     )
 
     assert client.index.mock_calls == [
-        mock.call(
-            body=data, index=index, doc_type=archivematica.search.constants.DOC_TYPE
-        ),
-        mock.call(
-            body=data, index=index, doc_type=archivematica.search.constants.DOC_TYPE
-        ),
+        mock.call(body=data, index=index),
+        mock.call(body=data, index=index),
     ]
     assert printfn.mock_calls == [
         mock.call("ERROR: error trying to index."),
@@ -1330,9 +1312,7 @@ def test_try_to_index_raises_exception_after_retries(client):
         )
 
     assert client.index.mock_calls == [
-        mock.call(
-            body=data, index=index, doc_type=archivematica.search.constants.DOC_TYPE
-        ),
+        mock.call(body=data, index=index),
     ]
     assert printfn.mock_calls == [
         mock.call("ERROR: error trying to index."),
