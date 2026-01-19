@@ -276,28 +276,15 @@ function appendRevealButton($list, dataType) {
 // setup
 $(document).ready(function() {
 
-  // apply input mask to date fields
-  Inputmask.extendDefinitions({
-    'd': { //basic day - from jquery.inputmask.date.extensions
-        validator: "0[1-9]|[12][0-9]|3[01]",
-        cardinality: 2,
-        prevalidator: [{ validator: "[0-3]", cardinality: 1 }],
-        placeholder: 'd'
-    },
-    'm': { //basic month - from jquery.inputmask.date.extensions
-        validator: "0[1-9]|1[012]",
-        cardinality: 2,
-        prevalidator: [{ validator: "[01]", cardinality: 1 }],
-        placeholder: 'm'
-    },
-    'y': { // modified year - to allow dates beyond 19xx and 20xx
-      validator: '\\d\\d\\d\\d',
-      cardinality: 4,
-      placeholder: 'y'
-    }
+  // Allow yyyy, yyyy-mm, or yyyy-mm-dd using the built-in datetime alias.
+  $('input[type="text"][name*="date"]').inputmask({
+    alias: 'datetime',
+    inputFormat: 'yyyy[-mm[-dd]]',
+    placeholder: 'yyyy-mm-dd',
+    greedy: true,
+    showMaskOnHover: true,
+    showMaskOnFocus: true
   });
-
-  $('input[type="text"][name*="date"]').inputmask('y[-m[-d]]');
 
   // active formset changer
   $('#id_rightsbasis').change(revealSelectedBasis);
