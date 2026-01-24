@@ -55,5 +55,11 @@
     "unzippedBag": "Upakket bag",
     "zipfile": "Komprimert katalog",
     "zippedBag": "Komprimert bag"
+  },
+  "topbar": {
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "initializing": "Initializing...",
+    "loading": "Loading"
   }
 }

@@ -55,5 +55,11 @@
     "unzippedBag": "Unzipped bad",
     "zipfile": "Zippad katalog",
     "zippedBag": "Zipped bag"
+  },
+  "topbar": {
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "initializing": "Initializing...",
+    "loading": "Loading"
   }
 }

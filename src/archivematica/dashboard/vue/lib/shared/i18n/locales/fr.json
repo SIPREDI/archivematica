@@ -55,5 +55,11 @@
     "unzippedBag": "Bag non compressé",
     "zipfile": "Répertoire compressé",
     "zippedBag": "Bag compressé"
+  },
+  "topbar": {
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "initializing": "Initializing...",
+    "loading": "Loading"
   }
 }

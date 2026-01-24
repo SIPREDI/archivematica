@@ -55,5 +55,11 @@
     "unzippedBag": "bagをZIP解凍しました",
     "zipfile": "圧縮されたディレクトリ",
     "zippedBag": "bagをZIP圧縮しました"
+  },
+  "topbar": {
+    "connected": "Connected",
+    "disconnected": "Disconnected",
+    "initializing": "Initializing...",
+    "loading": "Loading"
   }
 }

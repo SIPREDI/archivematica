@@ -725,8 +725,6 @@ BaseAppView = Backbone.View.extend({
       Sips.bind('add', this.add);
       Sips.bind('remove', this.remove);
 
-      window.statusWidget = new window.StatusView();
-
       this.poll(true);
     },
 
@@ -881,14 +879,6 @@ BaseAppView = Backbone.View.extend({
         dataType: 'text',
         type: 'GET',
         url: this.statusUrl + '?' + new Date().getTime(),
-        beforeSend: function()
-          {
-            window.statusWidget.startPoll();
-          },
-        error: function()
-          {
-            window.statusWidget.text(gettext('Error trying to connect to database. Trying again...'), true);
-          },
         success: function(response)
           {
             if (!this.hasResponseChanged(response)) {
@@ -934,22 +924,10 @@ BaseAppView = Backbone.View.extend({
 
               Sips.remove(unusedSips);
             }
-
-            // MCP status
-            if (data.mcp)
-            {
-              window.statusWidget.connect();
-            }
-            else
-            {
-              window.statusWidget.text(gettext('Error trying to connect to MCP server. Trying again...'), true);
-            }
           },
         complete: function()
           {
             var self = this;
-
-            window.statusWidget.endPoll();
 
             if (!self.idle)
             {
