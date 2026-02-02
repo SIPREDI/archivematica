@@ -45,7 +45,8 @@
     "startWithConfig": "{config}で転送を開始",
     "startWithDefault": "デフォルト設定で転送を開始",
     "submissionOptions": "転送送信オプション",
-    "type": "転送タイプ"
+    "type": "転送タイプ",
+    "autoApproveHelp": "この転送を自動的に処理承認します"
   },
   "transferTypes": {
     "dataverse": "Dataverse",
@@ -62,5 +63,30 @@
     "errorConnecting": "サーバーへの接続に失敗しました。再試行しています...",
     "initializing": "初期化中...",
     "loading": "読み込み中..."
+  },
+  "metadata": {
+    "add": "追加",
+    "addFiles": "ファイル追加",
+    "browse": "ブラウズ",
+    "close": "閉じる",
+    "duplicatePath": "エラー：選択したパスは既に存在します。",
+    "loadFailed": "ディレクトリの内容を読み込めませんでした。",
+    "retry": "再試行",
+    "loading": "ディレクトリの内容を読み込み中…",
+    "noDirectorySelected": "ディレクトリが選択されていません。",
+    "removeConfirm": "{path}を削除しますか？",
+    "selectAtLeastOne": "少なくとも1つのメタデータファイルを選択してください。",
+    "selectDirectory": "ディレクトリを選択",
+    "sourceLocation": "ソースの場所:",
+    "submitSuccess": "メタデータファイルを追加しました。",
+    "submitFailed": "メタデータファイルの追加に失敗しました。"
+  },
+  "aipBrowser": {
+    "ariaLabel": "AIP ブラウザ",
+    "loading": "AIP コンテンツを読み込み中…",
+    "loadFailed": "AIP コンテンツの読み込みに失敗しました",
+    "retry": "再試行",
+    "empty": "表示するファイルまたはフォルダがありません。",
+    "noDirectoryProvided": "AIP ブラウザにディレクトリが指定されていません。"
   }
 }

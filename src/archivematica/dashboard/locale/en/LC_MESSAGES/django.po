@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2026-01-27 15:18+0000\n"
+"POT-Creation-Date: 2026-02-05 16:57+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -492,7 +492,7 @@ msgstr ""
 msgid "Used in metadata-only DIP upload."
 msgstr ""
 
-#: components/administration/views.py:85 components/ingest/views.py:267
+#: components/administration/views.py:85 components/ingest/views.py:289
 #: fpr/views.py:265 main/views.py:306
 msgid "Deleted."
 msgstr ""
@@ -639,9 +639,9 @@ msgstr ""
 #: fpr/templates/fpr/idtool/detail.html:23
 #: fpr/templates/fpr/revisions/list.html:25
 #: templates/administration/reports/failures.html:27
-#: templates/archival_storage/view.html:63 templates/ingest/grid.html:57
-#: templates/ingest/grid.html:78 templates/transfer/grid.html:76
-#: templates/transfer/grid.html:98
+#: templates/archival_storage/view.html:63 templates/ingest/grid.html:54
+#: templates/ingest/grid.html:72 templates/transfer/grid.html:66
+#: templates/transfer/grid.html:83
 msgid "UUID"
 msgstr ""
 
@@ -721,7 +721,7 @@ msgstr ""
 
 #: components/archival_storage/views.py:220
 #: templates/archival_storage/view.html:83
-#: templates/ingest/normalization_report.html:31
+#: templates/ingest/normalization_report.html:30
 msgid "Location"
 msgstr ""
 
@@ -797,30 +797,30 @@ msgid ""
 "running? Please contact an administrator."
 msgstr ""
 
-#: components/ingest/views.py:160
+#: components/ingest/views.py:161
 msgid ""
 "Error retrieving source directories: is the storage server running? Please "
 "contact an administrator."
 msgstr ""
 
-#: components/ingest/views.py:169
+#: components/ingest/views.py:170
 msgid ""
 "No transfer source locations are available. Please contact an administrator."
 msgstr ""
 
-#: components/ingest/views.py:258
+#: components/ingest/views.py:280
 msgid "Are you sure you want to delete this metadata?"
 msgstr ""
 
-#: components/ingest/views.py:393
+#: components/ingest/views.py:415
 msgid "Review normalization"
 msgstr ""
 
-#: components/ingest/views.py:396
+#: components/ingest/views.py:418
 msgid "Review AIP"
 msgstr ""
 
-#: components/ingest/views.py:399
+#: components/ingest/views.py:421
 msgid "Review DIP"
 msgstr ""
 
@@ -1028,7 +1028,7 @@ msgstr ""
 
 #: fpr/models.py:161 fpr/templates/fpr/format/version/detail.html:31
 #: fpr/templates/fpr/fprule/list.html:30 fpr/templates/fpr/idrule/list.html:28
-#: templates/ingest/normalization_report.html:32
+#: templates/ingest/normalization_report.html:31
 msgid "Format"
 msgstr ""
 
@@ -1178,7 +1178,7 @@ msgstr ""
 msgid "%(description)s"
 msgstr ""
 
-#: fpr/models.py:452 templates/layout.html:67 templates/main/access.html:4
+#: fpr/models.py:452 templates/layout.html:65 templates/main/access.html:4
 #: templates/main/access.html:5
 msgid "Access"
 msgstr ""
@@ -1463,7 +1463,7 @@ msgstr ""
 #: templates/accounts/edit.html:40 templates/accounts/profile.html:45
 #: templates/administration/processing_edit.html:40
 #: templates/delete_request.html:20 templates/ingest/as/match.html:129
-#: templates/ingest/grid.html:161 templates/ingest/metadata_edit.html:67
+#: templates/ingest/grid.html:131 templates/ingest/metadata_edit.html:67
 #: templates/rights/rights_edit.html:291 templates/rights/rights_edit.html:293
 #: templates/rights/rights_grants_edit.html:112
 #: templates/rights/rights_grants_edit.html:114
@@ -1605,13 +1605,13 @@ msgstr ""
 #: fpr/templates/fpr/idrule/list.html:43
 #: fpr/templates/fpr/idtool/detail.html:30
 #: fpr/templates/fpr/idtool/detail.html:61
-#: templates/ingest/normalization_report.html:39
-#: templates/ingest/normalization_report.html:45
-#: templates/ingest/normalization_report.html:66
-#: templates/ingest/normalization_report.html:72
-#: templates/ingest/normalization_report.html:74
-#: templates/ingest/normalization_report.html:80
-#: templates/ingest/normalization_report.html:85
+#: templates/ingest/normalization_report.html:38
+#: templates/ingest/normalization_report.html:44
+#: templates/ingest/normalization_report.html:65
+#: templates/ingest/normalization_report.html:71
+#: templates/ingest/normalization_report.html:73
+#: templates/ingest/normalization_report.html:79
+#: templates/ingest/normalization_report.html:84
 msgid "Yes,No"
 msgstr ""
 
@@ -1990,7 +1990,7 @@ msgstr ""
 #: fpr/templates/fpr/idtool/detail.html:49
 #: templates/ingest/as/_search_form.html:5 templates/ingest/as/match.html:102
 #: templates/ingest/as/match.html:120
-#: templates/ingest/as/review_matches.html:31 templates/ingest/grid.html:152
+#: templates/ingest/as/review_matches.html:31 templates/ingest/grid.html:122
 msgid "Identifier"
 msgstr ""
 
@@ -2772,11 +2772,11 @@ msgstr ""
 msgid "First"
 msgstr ""
 
-#: templates/_pager.html:13 templates/ingest/normalization_report.html:115
+#: templates/_pager.html:13 templates/ingest/normalization_report.html:114
 msgid "Previous"
 msgstr ""
 
-#: templates/_pager.html:35 templates/ingest/normalization_report.html:121
+#: templates/_pager.html:35 templates/ingest/normalization_report.html:120
 #: templates/rights/rights_edit.html:288
 msgid "Next"
 msgstr ""
@@ -2902,7 +2902,7 @@ msgstr ""
 #: templates/administration/term_detail.html:5
 #: templates/administration/term_detail.html:6
 #: templates/administration/terms.html:5 templates/administration/terms.html:6
-#: templates/layout.html:68
+#: templates/layout.html:66
 msgid "Administration"
 msgstr ""
 
@@ -3019,8 +3019,8 @@ msgid "Path"
 msgstr ""
 
 #: templates/administration/locations.html:44
-#: templates/ingest/normalization_report.html:60
-#: templates/ingest/normalization_report.html:100
+#: templates/ingest/normalization_report.html:59
+#: templates/ingest/normalization_report.html:99
 msgid "N/A"
 msgstr "N/A"
 
@@ -3224,7 +3224,7 @@ msgstr ""
 #: templates/archival_storage/archival_storage.html:31
 #: templates/archival_storage/view.html:6
 #: templates/archival_storage/view.html:7
-#: templates/archival_storage/view.html:50 templates/layout.html:64
+#: templates/archival_storage/view.html:50 templates/layout.html:62
 msgid "Archival storage"
 msgstr ""
 
@@ -3299,7 +3299,7 @@ msgstr ""
 msgid "Pointer file"
 msgstr ""
 
-#: templates/archival_storage/view.html:109 templates/ingest/grid.html:143
+#: templates/archival_storage/view.html:109 templates/ingest/grid.html:113
 msgid "Upload DIP"
 msgstr ""
 
@@ -3312,7 +3312,7 @@ msgstr ""
 msgid "Metadata-only DIP upload to AtoM"
 msgstr ""
 
-#: templates/archival_storage/view.html:125 templates/ingest/grid.html:160
+#: templates/archival_storage/view.html:125 templates/ingest/grid.html:130
 msgid "Upload"
 msgstr ""
 
@@ -3361,11 +3361,11 @@ msgstr ""
 msgid "AIP"
 msgstr ""
 
-#: templates/ingest/aip_browse.html:36 templates/ingest/detail.html:10
+#: templates/ingest/aip_browse.html:27 templates/ingest/detail.html:10
 #: templates/ingest/grid.html:5 templates/ingest/grid.html:6
-#: templates/ingest/metadata_add_files.html:31
+#: templates/ingest/metadata_add_files.html:15
 #: templates/ingest/metadata_edit.html:31
-#: templates/ingest/microservices.html:11 templates/layout.html:62
+#: templates/ingest/microservices.html:11 templates/layout.html:60
 #: templates/rights/rights_edit.html:16
 #: templates/rights/rights_grants_edit.html:16
 #: templates/rights/rights_list.html:9
@@ -3511,7 +3511,7 @@ msgstr ""
 msgid "Search transfer backlog"
 msgstr ""
 
-#: templates/ingest/detail.html:16 templates/ingest/grid.html:56
+#: templates/ingest/detail.html:16 templates/ingest/grid.html:53
 msgid "Submission Information Package"
 msgstr ""
 
@@ -3542,9 +3542,9 @@ msgstr ""
 msgid "Rights"
 msgstr ""
 
-#: templates/ingest/detail.html:46 templates/ingest/grid.html:83
+#: templates/ingest/detail.html:46 templates/ingest/grid.html:77
 #: templates/ingest/metadata_edit.html:32 templates/transfer/detail.html:54
-#: templates/transfer/grid.html:103 templates/transfer/metadata_edit.html:31
+#: templates/transfer/grid.html:88 templates/transfer/metadata_edit.html:31
 msgid "Metadata"
 msgstr ""
 
@@ -3552,50 +3552,46 @@ msgstr ""
 msgid "Manual normalization event detail"
 msgstr ""
 
-#: templates/ingest/detail.html:51 templates/ingest/metadata_add_files.html:32
+#: templates/ingest/detail.html:51 templates/ingest/metadata_add_files.html:16
 msgid "Add metadata files"
 msgstr ""
 
-#: templates/ingest/grid.html:58
+#: templates/ingest/grid.html:55
 msgid "Ingest start time"
 msgstr ""
 
-#: templates/ingest/grid.html:61 templates/transfer/grid.html:79
+#: templates/ingest/grid.html:58 templates/transfer/grid.html:69
 msgid "Remove all completed"
 msgstr ""
 
-#: templates/ingest/grid.html:84 templates/transfer/grid.html:104
+#: templates/ingest/grid.html:78 templates/transfer/grid.html:89
 msgid "Remove"
 msgstr ""
 
-#: templates/ingest/grid.html:93 templates/transfer/grid.html:113
+#: templates/ingest/grid.html:87 templates/transfer/grid.html:98
 msgid "Microservice"
 msgstr ""
 
-#: templates/ingest/grid.html:99 templates/transfer/grid.html:119
+#: templates/ingest/grid.html:93 templates/transfer/grid.html:104
 msgid "Job"
 msgstr ""
 
-#: templates/ingest/grid.html:113 templates/main/tasks.html:16
-#: templates/transfer/grid.html:130
+#: templates/ingest/grid.html:104 templates/main/tasks.html:16
+#: templates/transfer/grid.html:115
 msgid "Tasks"
 msgstr ""
 
-#: templates/ingest/grid.html:146
+#: templates/ingest/grid.html:116
 msgid ""
 "Please provide the identifier required by the AtoM SWORD V1 deposit endpoint."
 msgstr ""
 
-#: templates/ingest/grid.html:148
+#: templates/ingest/grid.html:118
 msgid ""
 "<strong>AtoM:</strong> In AtoM, this is the permalink or slug of the target "
 "archival description where the DIP will be attached as a child. For example, "
 "if the URL of the archival description is 'http://myAtoM.ca/newsletters-2;"
 "rad', then you would enter 'newsletters-2'."
-msgstr ""
-
-#: templates/ingest/metadata_add_files.html:47
-msgid "Select a directory"
 msgstr ""
 
 #: templates/ingest/metadata_edit.html:78
@@ -3698,54 +3694,54 @@ msgstr ""
 msgid "Information about rights held in and over the resource."
 msgstr ""
 
-#: templates/ingest/normalization_report.html:14 templates/main/tasks.html:36
+#: templates/ingest/normalization_report.html:13 templates/main/tasks.html:36
 msgid "File name"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:15
+#: templates/ingest/normalization_report.html:14
 msgid "File format"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:16
+#: templates/ingest/normalization_report.html:15
 msgid "Preservation normalization attempted"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:17
+#: templates/ingest/normalization_report.html:16
 msgid "Preservation normalization failed"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:18
+#: templates/ingest/normalization_report.html:17
 msgid "Preservation conformance check"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:19
+#: templates/ingest/normalization_report.html:18
 msgid "Already in preservation format"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:20
+#: templates/ingest/normalization_report.html:19
 msgid "Access normalization attempted"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:21
+#: templates/ingest/normalization_report.html:20
 msgid "Access normalization failed"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:22
+#: templates/ingest/normalization_report.html:21
 msgid "Already in access format"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:23
+#: templates/ingest/normalization_report.html:22
 msgid "Access conformance check"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:55
-#: templates/ingest/normalization_report.html:57
-#: templates/ingest/normalization_report.html:95
-#: templates/ingest/normalization_report.html:97
+#: templates/ingest/normalization_report.html:54
+#: templates/ingest/normalization_report.html:56
+#: templates/ingest/normalization_report.html:94
+#: templates/ingest/normalization_report.html:96
 msgid "Failed,Passed"
 msgstr ""
 
-#: templates/ingest/normalization_report.html:110
+#: templates/ingest/normalization_report.html:109
 #, python-format
 msgid ""
 "\n"
@@ -3783,29 +3779,29 @@ msgstr ""
 msgid "Archivematica Dashboard"
 msgstr ""
 
-#: templates/layout.html:58 templates/rights/rights_edit.html:18
+#: templates/layout.html:56 templates/rights/rights_edit.html:18
 #: templates/rights/rights_grants_edit.html:18
 #: templates/rights/rights_list.html:11 templates/transfer/component.html:10
 #: templates/transfer/detail.html:9 templates/transfer/grid.html:5
-#: templates/transfer/grid.html:6 templates/transfer/grid.html:75
+#: templates/transfer/grid.html:6 templates/transfer/grid.html:65
 #: templates/transfer/metadata_edit.html:30
 #: templates/transfer/microservices.html:10
 msgid "Transfer"
 msgstr ""
 
-#: templates/layout.html:60
+#: templates/layout.html:58
 msgid "Backlog"
 msgstr ""
 
-#: templates/layout.html:66
+#: templates/layout.html:64
 msgid "Preservation planning"
 msgstr ""
 
-#: templates/layout.html:76
+#: templates/layout.html:74
 msgid "Your profile"
 msgstr ""
 
-#: templates/layout.html:81
+#: templates/layout.html:79
 msgid "Log out"
 msgstr ""
 
@@ -4004,6 +4000,6 @@ msgstr ""
 msgid "Transfer metadata"
 msgstr ""
 
-#: templates/transfer/grid.html:77
+#: templates/transfer/grid.html:67
 msgid "Transfer start time"
 msgstr ""

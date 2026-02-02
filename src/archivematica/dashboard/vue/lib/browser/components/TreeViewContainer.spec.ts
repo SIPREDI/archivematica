@@ -2,8 +2,9 @@ import { describe, it, expect, beforeEach, vi } from 'vitest'
 import { mount } from '@vue/test-utils'
 import { createI18nMock } from '@/shared/i18n'
 import TreeViewContainer from '@/browser/components/TreeViewContainer.vue'
-import TreeView from '@/browser/components/TreeView.vue'
-import type { SourceLocation, FileNode } from '@/shared/models'
+import TreeView from '@/shared/components/TreeView.vue'
+import type { FileNode } from '@/browser/types'
+import type { SourceLocation } from '@/shared/http/transfer'
 
 const i18n = createI18nMock()
 
@@ -72,8 +73,6 @@ describe('TreeViewContainer', () => {
     loading: false,
     apiError: null,
     fileNodes: [],
-    selectedPath: '',
-    canAddSelectedPath: false,
     transferType: 'standard',
     expandedPaths: [],
   }
@@ -179,36 +178,8 @@ describe('TreeViewContainer', () => {
 
     const treeView = wrapper.findComponent(TreeView)
     expect(treeView.exists()).toBe(true)
-    expect(treeView.props()).toEqual({
-      nodes: mockFileNodes,
-      selectedPath: '',
-      transferType: 'standard',
-      expandedPaths: [],
-    })
-  })
-
-  it('emits select event when tree node is selected', async () => {
-    const wrapper = mount(TreeViewContainer, {
-      global: {
-        ...global,
-        plugins: [i18n],
-      },
-      props: {
-        ...defaultProps,
-        currentLocation: 'loc1',
-        fileNodes: mockFileNodes,
-      },
-    })
-
-    const treeView = wrapper.findComponent(TreeView)
-    treeView.vm.$emit('select', { path: '/folder1', canAdd: true })
-
-    const selectEvents = wrapper.emitted('select') ?? []
-    const firstSelect = selectEvents[0]
-    if (!firstSelect) {
-      throw new Error('Expected select event payload')
-    }
-    expect(firstSelect).toEqual([{ path: '/folder1', canAdd: true }])
+    expect(treeView.props('items')).toEqual(mockFileNodes)
+    expect(treeView.props('expanded')).toEqual([])
   })
 
   it('emits expand event when tree node is expanded', async () => {
@@ -229,7 +200,7 @@ describe('TreeViewContainer', () => {
     if (!firstFileNode) {
       throw new Error('Expected at least one file node')
     }
-    treeView.vm.$emit('expand', firstFileNode)
+    treeView.vm.$emit('toggle', firstFileNode)
 
     const expandEvents = wrapper.emitted('expand') ?? []
     const firstExpand = expandEvents[0]
@@ -237,9 +208,10 @@ describe('TreeViewContainer', () => {
       throw new Error('Expected expand event payload')
     }
     expect(firstExpand).toEqual([firstFileNode])
+    expect(wrapper.emitted('toggle')).toEqual([[firstFileNode.path]])
   })
 
-  it('disables Add button when no path is selected', () => {
+  it('emits add event when Add action is clicked', async () => {
     const wrapper = mount(TreeViewContainer, {
       global: {
         ...global,
@@ -252,63 +224,19 @@ describe('TreeViewContainer', () => {
       },
     })
 
-    const addButton = wrapper.find('button.add-button')
-    expect(addButton.attributes('disabled')).toBeDefined()
-  })
-
-  it('enables Add button when path is selected', async () => {
-    const wrapper = mount(TreeViewContainer, {
-      global: {
-        ...global,
-        plugins: [i18n],
-      },
-      props: {
-        ...defaultProps,
-        currentLocation: 'loc1',
-        fileNodes: mockFileNodes,
-        selectedPath: '/folder1',
-        canAddSelectedPath: true,
-      },
-    })
-
-    const addButton = wrapper.find('button.add-button')
-    expect(addButton.attributes('disabled')).toBeUndefined()
-  })
-
-  it('emits add event when Add button is clicked', async () => {
-    const wrapper = mount(TreeViewContainer, {
-      global: {
-        ...global,
-        plugins: [i18n],
-      },
-      props: {
-        ...defaultProps,
-        currentLocation: 'loc1',
-        fileNodes: mockFileNodes,
-        selectedPath: '/folder1',
-        canAddSelectedPath: true,
-      },
-    })
-
-    const addButton = wrapper.find('button.add-button')
+    const addButton = wrapper.find('button.transfer-tree-action')
+    expect(addButton.exists()).toBe(true)
     await addButton.trigger('click')
 
-    expect(wrapper.emitted('add')).toBeTruthy()
+    const addEvents = wrapper.emitted('add') ?? []
+    const firstAdd = addEvents[0]
+    if (!firstAdd) {
+      throw new Error('Expected add event payload')
+    }
+    expect(firstAdd[0]).toEqual(mockFileNodes[0])
   })
 
-  it('does not show tree container when no location is selected', () => {
-    const wrapper = mount(TreeViewContainer, {
-      global: {
-        ...global,
-        plugins: [i18n],
-      },
-      props: defaultProps,
-    })
-
-    expect(wrapper.find('.transfer-tree-container').exists()).toBe(false)
-  })
-
-  it('updates selected path in tree when prop changes', async () => {
+  it('emits add event on Enter key select', async () => {
     const wrapper = mount(TreeViewContainer, {
       global: {
         ...global,
@@ -322,11 +250,35 @@ describe('TreeViewContainer', () => {
     })
 
     const treeView = wrapper.findComponent(TreeView)
-    expect(treeView.props('selectedPath')).toBe('')
+    const firstNode = mockFileNodes[0]
+    if (!firstNode) {
+      throw new Error('Expected at least one file node')
+    }
 
-    await wrapper.setProps({ selectedPath: '/folder1' })
+    const onEnter = treeView.props('onEnter') as ((node: FileNode) => void) | undefined
+    if (!onEnter) {
+      throw new Error('Expected onEnter handler')
+    }
+    onEnter(firstNode)
 
-    expect(treeView.props('selectedPath')).toBe('/folder1')
+    const addEvents = wrapper.emitted('add') ?? []
+    const firstAdd = addEvents[0]
+    if (!firstAdd) {
+      throw new Error('Expected add event payload')
+    }
+    expect(firstAdd[0]).toEqual(firstNode)
+  })
+
+  it('does not show tree container when no location is selected', () => {
+    const wrapper = mount(TreeViewContainer, {
+      global: {
+        ...global,
+        plugins: [i18n],
+      },
+      props: defaultProps,
+    })
+
+    expect(wrapper.find('.transfer-tree-container').exists()).toBe(false)
   })
 
   describe('WCAG Compliance', () => {
@@ -395,7 +347,7 @@ describe('TreeViewContainer', () => {
       expect(alert.text()).toBe(errorMessage)
     })
 
-    it('should have accessible add button', () => {
+    it('should have accessible add action', () => {
       const wrapper = mount(TreeViewContainer, {
         global: {
           ...global,
@@ -405,35 +357,12 @@ describe('TreeViewContainer', () => {
           ...defaultProps,
           currentLocation: 'loc1',
           fileNodes: mockFileNodes,
-          selectedPath: '/folder1',
-          canAddSelectedPath: true,
         },
       })
 
-      const addButton = wrapper.find('.add-button')
+      const addButton = wrapper.find('.transfer-tree-action')
       expect(addButton.attributes('type')).toBe('button')
-      expect(addButton.attributes('aria-disabled')).toBe('false')
       expect(addButton.attributes('aria-label')).toBe('Add /folder1 to transfer')
-    })
-
-    it('should have proper disabled state for add button', () => {
-      const wrapper = mount(TreeViewContainer, {
-        global: {
-          ...global,
-          plugins: [i18n],
-        },
-        props: {
-          ...defaultProps,
-          currentLocation: 'loc1',
-          fileNodes: mockFileNodes,
-          selectedPath: '',
-        },
-      })
-
-      const addButton = wrapper.find('.add-button')
-      expect(addButton.attributes('aria-disabled')).toBe('true')
-      expect(addButton.attributes('disabled')).toBeDefined()
-      expect(addButton.attributes('aria-label')).toBe('Select a file or folder to add')
     })
 
     it('should update aria-busy when loading', () => {

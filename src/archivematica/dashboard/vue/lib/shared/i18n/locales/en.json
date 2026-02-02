@@ -32,6 +32,7 @@
     "accession": "Accession no.",
     "add": "Add",
     "autoApprove": "Approve automatically",
+    "autoApproveHelp": "Automatically approve this transfer for processing",
     "browse": "Browse",
     "configurationForm": "Transfer configuration form",
     "fileBrowserSection": "File browser section",
@@ -62,5 +63,30 @@
     "errorConnecting": "Error trying to connect to server. Trying again...",
     "initializing": "Initializing...",
     "loading": "Loading..."
+  },
+  "metadata": {
+    "add": "Add",
+    "addFiles": "Add files",
+    "browse": "Browse",
+    "close": "Close",
+    "duplicatePath": "Error: The selected path is already present.",
+    "loadFailed": "Failed to load directory contents.",
+    "retry": "Retry",
+    "loading": "Loading directory contents…",
+    "noDirectorySelected": "No directory selected.",
+    "removeConfirm": "Are you sure you want to remove {path}?",
+    "selectAtLeastOne": "Please select at least one metadata file.",
+    "selectDirectory": "Select a directory",
+    "sourceLocation": "Source location:",
+    "submitSuccess": "Metadata files added successfully.",
+    "submitFailed": "Failed to add metadata files."
+  },
+  "aipBrowser": {
+    "ariaLabel": "AIP browser",
+    "loading": "Loading AIP contents…",
+    "loadFailed": "Failed to load AIP contents",
+    "retry": "Retry",
+    "empty": "No files or folders to display.",
+    "noDirectoryProvided": "No directory provided for AIP browser."
   }
 }
