@@ -88,5 +88,8 @@
     "retry": "再試行",
     "empty": "表示するファイルまたはフォルダがありません。",
     "noDirectoryProvided": "AIP ブラウザにディレクトリが指定されていません。"
+  },
+  "monitor": {
+    "microservice": "Microservice"
   }
 }

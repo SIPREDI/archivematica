@@ -88,5 +88,8 @@
     "retry": "Prøv igjen",
     "empty": "Ingen filer eller mapper å vise.",
     "noDirectoryProvided": "Ingen katalog oppgitt for AIP-nettleseren."
+  },
+  "monitor": {
+    "microservice": "Mikrotjeneste"
   }
 }

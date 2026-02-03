@@ -88,5 +88,8 @@
     "retry": "Försök igen",
     "empty": "Inga filer eller mappar att visa.",
     "noDirectoryProvided": "Ingen katalog angiven för AIP-utforskaren."
+  },
+  "monitor": {
+    "microservice": "Micro-service"
   }
 }

@@ -88,5 +88,8 @@
     "retry": "Reintentar",
     "empty": "No hay archivos o carpetas para mostrar.",
     "noDirectoryProvided": "No se proporcionó un directorio para el explorador de AIP."
+  },
+  "monitor": {
+    "microservice": "Microservicio"
   }
 }

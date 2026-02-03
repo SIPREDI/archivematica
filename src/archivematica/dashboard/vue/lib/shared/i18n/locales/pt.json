@@ -88,5 +88,8 @@
     "retry": "Tentar novamente",
     "empty": "Nenhum arquivo ou pasta para exibir.",
     "noDirectoryProvided": "Nenhum diretório fornecido para o navegador AIP."
+  },
+  "monitor": {
+    "microservice": "Microservice"
   }
 }
