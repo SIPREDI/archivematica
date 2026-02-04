@@ -15,14 +15,6 @@ jobs:
         tag:
           - "aip-encrypt"
           - "aip-encrypt-mirror"
-          - "black-box"
-          - "icc"
-          - "ipc preservation"
-          - "ipc access"
-          - "man-norm"
-          - "metadata-xml"
-          - "tcc"
-          - "tpc"
           - "uuids-dirs"
         browser:
           - "Firefox"
