@@ -354,7 +354,7 @@ class RPCServer(GearmanWorker):
         model = model_attrs[0]
         sql = """
         SELECT SIPUUID,
-               MAX(UNIX_TIMESTAMP(createdTime) + createdTimeDec) AS timestamp
+               MAX(UNIX_TIMESTAMP(createdTime)) AS timestamp
             FROM Jobs
             WHERE unitType=%s AND NOT SIPUUID LIKE '%%None%%'
             GROUP BY SIPUUID;"""
@@ -374,7 +374,9 @@ class RPCServer(GearmanWorker):
                 "active": unit.active,
                 "jobs": [],
             }
-            jobs = Job.objects.filter(sipuuid=unit_id).order_by("-createdtime")
+            jobs = Job.objects.filter(sipuuid=unit_id).order_by(
+                "-createdtime", "-jobuuid"
+            )
             if jobs:
                 item["directory"] = jobs[0].get_directory_name()
             # Embed "Access System ID" in status data (used in Upload DIP).
@@ -398,9 +400,9 @@ class RPCServer(GearmanWorker):
                 new_job["uuid"] = str(job_.jobuuid)
                 new_job["link_id"] = str(job_.microservicechainlink)
                 new_job["currentstep"] = job_.currentstep
-                new_job["timestamp"] = "%d.%s" % (
-                    calendar.timegm(job_.createdtime.timetuple()),
-                    str(job_.createdtimedec).split(".")[-1],
+                new_job["timestamp"] = (
+                    f"{calendar.timegm(job_.createdtime.timetuple())}."
+                    f"{job_.createdtime.microsecond:06d}"
                 )
                 new_job["microservicegroup"] = link.get_label("group", lang)
                 new_job["type"] = link.get_label("description", lang)
